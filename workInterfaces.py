@@ -8,7 +8,7 @@ def main():
         #print get_interface()
         import time
         test = get_BSSI()
-        for i in range(0,3):
+        for i in range(0,1):
             time.sleep(0.5)
             oldTest = test
             test = get_BSSI()
@@ -17,7 +17,11 @@ def main():
             print (test)
     print ("End")
 
-    connect_to_network("ASUS")  #connect to network using BSSID
+    # ssid_dict = get_BSSI()
+    #
+    # print(ssid_dict["ASUS"][1])
+
+    #connect_to_network("ASUS")  #connect to network using netsh
 
 
 

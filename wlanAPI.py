@@ -3,6 +3,7 @@ import time
 from ctypes import *
 from ctypes.wintypes import *
 from sys import exit
+import re
 
 def customresize(array, new_size):
     return (array._type_*new_size).from_address(addressof(array))
@@ -265,7 +266,8 @@ class MAC_BSSID_POWER:
 
 
 def get_BSSI():
-
+    intab = "b'"
+    outtab = ""
     BSSI_Values={}
 
     NegotiatedVersion = DWORD()
@@ -302,7 +304,6 @@ def get_BSSI():
                 avail_net_list2 = pAvailableNetworkList2.contents
                 networks2 = customresize(avail_net_list2.NetworkBSS,
                                          avail_net_list2.NumberOfItems)
-                print()
 
                 for network in networks2:                                              #need to show specific interfaces
 
@@ -310,13 +311,17 @@ def get_BSSI():
                     BSSID = ':'.join('%02x' % b for b in network.dot11Bssid).upper()
                     signal_strength = str(network.lRssi)
 
-                    #print ("SSID: " + SSID + " BSSID: "+ BSSID+ " SS: "+signal_strength)
-                    if(SSID == "b'ASUS'"):
-                        print(BSSID)
+                    # print ("SSID: " + SSID + " BSSID: "+ BSSID+ " SS: "+signal_strength)
+
+                    # if(SSID == "b'ASUS'"):
+                    #     print(SSID)
+                    #     print(signal_strength)
 
                     #if (SSID == 'ASUS'):
 
-                    BSSI_Values[BSSID] = [SSID,signal_strength]
+                    SSID = re.sub("(^b'|'$)","",SSID)
+                    BSSI_Values[SSID] = [BSSID,signal_strength]
+
 
             finally:
                 WlanFreeMemory(pAvailableNetworkList2)
